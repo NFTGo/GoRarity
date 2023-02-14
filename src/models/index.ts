@@ -1,6 +1,6 @@
 export * from "./collection";
 export * from "./token";
-export * from "./token-identifier";
-export * from "./token-metadata";
+export { EVMContractTokenIdentifier } from "./token-identifier";
+export { StringAttribute, TokenMetadata } from "./token-metadata";
 export * from "./token-rarity";
 export * from "./token-standard";

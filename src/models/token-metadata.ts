@@ -1,26 +1,38 @@
 import { normalizeAttributeString } from "./utils/attribute-utils";
 
-type AttributeName = string;
-type AttributeValue = string;
+export type AttributeName = string;
+export type AttributeValue = string;
 
 export class StringAttribute {
-  public name: AttributeName;
-  public value: AttributeValue;
+  private _name: AttributeName;
+  private _value: AttributeValue;
 
   constructor(name: AttributeName, value: AttributeValue) {
-    this.name = normalizeAttributeString(name);
-    this.value = normalizeAttributeString(value);
+    this._name = normalizeAttributeString(name);
+    this._value = normalizeAttributeString(value);
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  get value() {
+    return this._value;
   }
 }
 
 export class TokenMetadata {
-  public stringAttributes: Map<AttributeName, StringAttribute> | undefined = new Map();
+  private _stringAttributes: Map<AttributeName, StringAttribute> = new Map();
 
   constructor(
     stringAttributes: Map<AttributeName, StringAttribute>,
   ) {
     if (!stringAttributes) { throw new Error('null stringAttributes') }
-    this.stringAttributes = TokenMetadata.normalizeAttributes<StringAttribute>(stringAttributes);
+    this._stringAttributes = TokenMetadata.normalizeAttributes<StringAttribute>(stringAttributes);
+  }
+
+  get stringAttributes() {
+    return this._stringAttributes;
   }
 
   private static normalizeAttributes<T>(attributes: Map<AttributeName, T>) {

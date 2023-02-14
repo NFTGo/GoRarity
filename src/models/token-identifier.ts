@@ -1,15 +1,25 @@
+import { normalizeContractString } from "./utils/attribute-utils";
+
 export class EVMContractTokenIdentifier {
-  public contractAddress: string;
-  public tokenId: number;
+  private _contractAddress: string;
+  private _tokenId: number;
 
   constructor(contractAddress: string, tokenId: number) {
-    this.contractAddress = contractAddress;
-    this.tokenId = tokenId;
+    this._contractAddress = normalizeContractString(contractAddress);
+    this._tokenId = tokenId;
   }
 
-  get() {
-    return `Contract(${this.contractAddress}) #${this.tokenId}`;
+  get tokenId() {
+    return this._tokenId;
   }
+
+  get contractAddress() {
+    return this._contractAddress;
+  }
+
+  // identify() {
+  //   return `Contract(${this._contractAddress}) #${this._tokenId}`;
+  // }
 
   static fromDict(dict: { contractAddress: string, tokenId: number }) {
     return new EVMContractTokenIdentifier(dict.contractAddress, dict.tokenId);
@@ -17,8 +27,8 @@ export class EVMContractTokenIdentifier {
 
   toDict() {
     return {
-      "contractAddress": this.contractAddress,
-      "tokenId": this.tokenId,
+      "contractAddress": this._contractAddress,
+      "tokenId": this._tokenId,
     };
   }
 }

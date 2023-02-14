@@ -11,15 +11,13 @@ export class Scorer {
   }
 
   validateCollection(collection: Collection) {
-    const allowedStandards = [TokenStandard.ERC721, TokenStandard.ERC1155];
-
-    // TODO validate collection with the rules
-    //
-    collection.tokenStandards().every(val => allowedStandards.includes(val))
+    const allowedStandards = [TokenStandard.ERC721];
+    if (!collection.tokenStandards().every(val => allowedStandards.includes(val))) {
+      throw new Error(`GoRarity currently only supports ERC721 standards`);
+    };
   }
 
   scoreTokens(collection: Collection, tokens: Token[]): number[] {
-
     this.validateCollection(collection);
     return this.handler.scoreTokens(collection, tokens);
   }
