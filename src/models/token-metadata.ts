@@ -43,4 +43,14 @@ export class TokenMetadata {
     });
     return normalizedAttributes
   }
+
+  static fromTokenTraits(tokenTraits: { traitType: string, traitValue: string }[]): TokenMetadata {
+    const stringAttributes: Map<AttributeName, StringAttribute> = new Map();
+
+    for (const trait of tokenTraits) {
+      stringAttributes.set(trait.traitType, new StringAttribute(trait.traitType, trait.traitValue));
+    }
+
+    return new TokenMetadata(stringAttributes);
+  }
 }

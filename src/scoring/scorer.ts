@@ -21,4 +21,9 @@ export class Scorer {
     this.validateCollection(collection);
     return this.handler.scoreTokens(collection, tokens);
   }
+
+  scoreCollection(collection: Collection): number[] {
+    this.validateCollection(collection);
+    return this.handler.scoreTokens(collection, collection.tokens);
+  }
 }
