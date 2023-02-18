@@ -1,6 +1,6 @@
-import { EVMContractTokenIdentifier } from "./token-identifier";
-import { TokenMetadata } from "./token-metadata";
-import { TokenStandard } from "./token-standard";
+import { EVMContractTokenIdentifier } from './token-identifier';
+import { TokenMetadata } from './token-metadata';
+import { TokenStandard } from './token-standard';
 
 export class Token {
   private _tokenIdentifier: EVMContractTokenIdentifier;

@@ -1,9 +1,8 @@
-import { Collection, Token, TokenStandard } from "../models";
-import { JaccardDistanceScoringHandler } from "./handlers";
-import { IScoringHandler } from "./scoring-handler";
+import { Collection, Token, TokenStandard } from '../models';
+import { JaccardDistanceScoringHandler } from './handlers';
+import { IScoringHandler } from './scoring-handler';
 
 export class Scorer {
-
   private handler: IScoringHandler;
 
   constructor() {
@@ -12,9 +11,9 @@ export class Scorer {
 
   validateCollection(collection: Collection) {
     const allowedStandards = [TokenStandard.ERC721];
-    if (!collection.tokenStandards().every(val => allowedStandards.includes(val))) {
+    if (!collection.tokenStandards().every((val) => allowedStandards.includes(val))) {
       throw new Error(`GoRarity currently only supports ERC721 standards`);
-    };
+    }
   }
 
   scoreTokens(collection: Collection, tokens: Token[]): number[] {

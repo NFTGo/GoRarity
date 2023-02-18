@@ -1,9 +1,9 @@
-import { Token } from "./token"
-import { TokenRankingFeatures } from "./token-ranking-features"
+import { Token } from './token';
+import { TokenRankingFeatures } from './token-ranking-features';
 
 export type TokenRarity = {
-  score: number,
-  tokenFeatures: TokenRankingFeatures,
-  token: Token,
-  rank: number,
-}
+  score: number;
+  tokenFeatures: TokenRankingFeatures;
+  token: Token;
+  rank: number;
+};

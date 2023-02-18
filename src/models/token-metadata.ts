@@ -1,4 +1,4 @@
-import { normalizeAttributeString } from "./utils/attribute-utils";
+import { normalizeAttributeString } from './utils/attribute-utils';
 
 export type AttributeName = string;
 export type AttributeValue = string;
@@ -24,10 +24,10 @@ export class StringAttribute {
 export class TokenMetadata {
   private _stringAttributes: Map<AttributeName, StringAttribute> = new Map();
 
-  constructor(
-    stringAttributes: Map<AttributeName, StringAttribute>,
-  ) {
-    if (!stringAttributes) { throw new Error('null stringAttributes') }
+  constructor(stringAttributes: Map<AttributeName, StringAttribute>) {
+    if (!stringAttributes) {
+      throw new Error('null stringAttributes');
+    }
     this._stringAttributes = TokenMetadata.normalizeAttributes<StringAttribute>(stringAttributes);
   }
 
@@ -39,12 +39,12 @@ export class TokenMetadata {
     const normalizedAttributes = new Map<AttributeName, T>();
     attributes.forEach((attribute, attributeName) => {
       const normalizedAttributeName = normalizeAttributeString(attributeName);
-      normalizedAttributes.set(normalizedAttributeName, attribute)
+      normalizedAttributes.set(normalizedAttributeName, attribute);
     });
-    return normalizedAttributes
+    return normalizedAttributes;
   }
 
-  static fromTokenTraits(tokenTraits: { traitType: string, traitValue: string }[]): TokenMetadata {
+  static fromTokenTraits(tokenTraits: { traitType: string; traitValue: string }[]): TokenMetadata {
     const stringAttributes: Map<AttributeName, StringAttribute> = new Map();
 
     for (const trait of tokenTraits) {

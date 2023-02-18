@@ -1,19 +1,21 @@
-import { Collection, TokenRarity } from "./models";
-import { Scorer } from "./scoring";
-import { TokenFeatureExtractor } from "./scoring/token-feature-extractor";
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Collection, TokenRarity } from './models';
+import { Scorer } from './scoring';
+import { TokenFeatureExtractor } from './scoring/token-feature-extractor';
 
 export class RarityRanker {
   private static defaultScorer = new Scorer();
 
-  constructor() { }
+  constructor() {}
 
   static rankCollection(collection: Collection, score: Scorer = RarityRanker.defaultScorer): TokenRarity[] {
-
     if (!collection || !collection.tokens || collection.tokens.length === 0) return [];
 
     const tokens = collection.tokens;
     const scores = score.scoreTokens(collection, tokens);
-    if (scores.length !== tokens.length) { throw new Error(`dimension of scores doesn't match dimension of tokens`) };
+    if (scores.length !== tokens.length) {
+      throw new Error(`dimension of scores doesn't match dimension of tokens`);
+    }
 
     const tokenRarities: TokenRarity[] = [];
 
@@ -25,7 +27,7 @@ export class RarityRanker {
         tokenFeatures: tokenFeatures,
         rank: 0, // Prefill
       });
-    };
+    }
 
     return RarityRanker.setRarityRanks(tokenRarities);
   }

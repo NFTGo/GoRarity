@@ -1,1 +1,1 @@
-export * from "./jaccard-distance-scoring-handler";
+export * from './jaccard-distance-scoring-handler';

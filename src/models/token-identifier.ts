@@ -1,4 +1,4 @@
-import { normalizeContractString } from "./utils/attribute-utils";
+import { normalizeContractString } from './utils/attribute-utils';
 
 export class EVMContractTokenIdentifier {
   private _contractAddress: string;
@@ -26,14 +26,14 @@ export class EVMContractTokenIdentifier {
   //   return `Contract(${this._contractAddress}) #${this._tokenId}`;
   // }
 
-  static fromDict(dict: { contractAddress: string, tokenId: number }) {
+  static fromDict(dict: { contractAddress: string; tokenId: number }) {
     return new EVMContractTokenIdentifier(dict.contractAddress, dict.tokenId);
   }
 
   toDict() {
     return {
-      "contractAddress": this._contractAddress,
-      "tokenId": this._tokenId,
+      contractAddress: this._contractAddress,
+      tokenId: this._tokenId,
     };
   }
 }

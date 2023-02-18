@@ -1,11 +1,10 @@
-import { Collection, Token } from "../../models";
-import { IScoringHandler } from "../scoring-handler";
-import { round } from "../utils";
+import { Collection, Token } from '../../models';
+import { IScoringHandler } from '../scoring-handler';
+import { round } from '../utils';
 
 const MAX_RARITY_SCORE = 100;
 
 export class JaccardDistanceScoringHandler implements IScoringHandler {
-
   scoreTokens(collection: Collection, tokens: Token[]): number[] {
     const traitKeys: string[] = [];
     const traitKeyMapTraitKeysIndex = new Map<string, number>();
@@ -14,7 +13,7 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
 
     for (const token of tokens) {
       const indexes: number[] = [];
-      Array.from(token.metadata.stringAttributes.values()).forEach(trait => {
+      Array.from(token.metadata.stringAttributes.values()).forEach((trait) => {
         const traitKey = `${trait.name}-${trait.value}`;
         let index = traitKeyMapTraitKeysIndex.get(traitKey);
         if (index === undefined) {
@@ -26,9 +25,9 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
       });
       tokenIds.push(token.tokenIdentifier.tokenId);
       indexesList.push(indexes);
-    };
+    }
 
-    return this.calcScores(tokenIds, indexesList);;
+    return this.calcScores(tokenIds, indexesList);
   }
 
   private calcScores(tokenIds: number[], indexesList: number[][]): number[] {
@@ -45,7 +44,7 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
       if (maxScore === -1 || score > maxScore) maxScore = score;
       if (minScore === -1 || score < minScore) minScore = score;
       scores.push(score);
-    };
+    }
 
     return this.normalizeScores(scores, maxScore, minScore);
   }
@@ -63,7 +62,6 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
   }
 
   private normalizeScores(scores: number[], maxScore: number, minScore: number): number[] {
-
     const range = maxScore - minScore;
     if (range < 0) throw new Error('negative rarity range');
 
@@ -74,10 +72,10 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
         // Set each element of scores as zero when they are the same
         normalizedScores[i] = 0;
       } else {
-        normalizedScores[i] = MAX_RARITY_SCORE * (scores[i] - minScore) / range;
+        normalizedScores[i] = (MAX_RARITY_SCORE * (scores[i] - minScore)) / range;
         normalizedScores[i] = round(normalizedScores[i], 2);
       }
-    };
+    }
 
     return normalizedScores;
   }
