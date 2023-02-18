@@ -6,11 +6,11 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "jest",
     "prepare": "husky install",
     "lint": "eslint ./ --max-warnings=0 --ext .ts",
     "format": "prettier --config .prettierrc '.' --write",
-    "format-watch": "onchange -- prettier '.' --write {{changed}}"
+    "format-watch": "onchange -- prettier '.' --write {{changed}}",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
