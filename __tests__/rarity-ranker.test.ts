@@ -1,6 +1,4 @@
-import { EVMContractTokenIdentifier, Token, TokenRarity, TokenStandard } from '../src/models';
-import { RarityRanker } from '../src/rarity-ranker';
-import { Scorer } from '../src/scoring';
+import { EVMContractTokenIdentifier, GoRarityScorer, RarityRanker, Token, TokenRarity, TokenStandard } from '../src';
 import { generateCollectionWithTokensTraits } from './utils/utils';
 
 function verifyTokenRarities(
@@ -11,7 +9,7 @@ function verifyTokenRarities(
   for (let idx = 0; idx < tokenRarities.length; idx++) {
     expect(tokenRarities[idx].rank).toBe(expectedData[idx].rank);
     expect(tokenRarities[idx].token.tokenIdentifier.tokenId).toBe(expectedData[idx].id);
-    expect(tokenRarities[idx].tokenFeatures.uniqueAttributeCount).toBe(expectedData[idx].uniqueTraits);
+    expect(tokenRarities[idx].tokenFeatures.uniqueTraitCount).toBe(expectedData[idx].uniqueTraits);
     if (expectedData[idx].score !== undefined) {
       expect(tokenRarities[idx].score).toBe(expectedData[idx].score);
     }
@@ -19,12 +17,12 @@ function verifyTokenRarities(
 }
 
 describe('RarityRanker', () => {
-  test('test_rarity_ranker_empty_collection', () => {
+  test('test_rarity_ranker_null_collection', () => {
     const tokenRarities = RarityRanker.rankCollection(null as any);
     expect(tokenRarities).toEqual([]);
   });
 
-  test('test_rarity_ranker_one_item', () => {
+  test('test_rarity_ranker_one_token', () => {
     const testCollection = generateCollectionWithTokensTraits([
       // only one token
       [{ traitType: 'trait1', traitValue: 'value1' }],
@@ -104,7 +102,7 @@ describe('RarityRanker', () => {
     ]);
 
     const tokenRarities = RarityRanker.rankCollection(testCollection);
-    const scorer = new Scorer();
+    const scorer = new GoRarityScorer();
     const expectedscores = scorer.scoreCollection(testCollection);
     const expectedTokensInRankOrder = [
       { id: 2, rank: 1, uniqueTraits: 1, score: expectedscores[2] },
@@ -123,7 +121,7 @@ describe('RarityRanker', () => {
         { traitType: 'trait2', traitValue: 'value1' },
         { traitType: 'trait3', traitValue: 'value1' },
       ],
-      // Token 1
+      // Token 1 same as Token 0
       [
         { traitType: 'trait1', traitValue: 'value1' },
         { traitType: 'trait2', traitValue: 'value1' },
@@ -138,13 +136,13 @@ describe('RarityRanker', () => {
       // Token 3
       [
         { traitType: 'trait1', traitValue: 'value2' },
-        { traitType: 'trait2', traitValue: 'value2' },
+        { traitType: 'trait2', traitValue: 'value2' }, // unique trait
         { traitType: 'trait3', traitValue: 'value3' },
       ],
       // Token 4
       [
-        { traitType: 'trait1', traitValue: 'value3' },
-        { traitType: 'trait2', traitValue: 'value3' },
+        { traitType: 'trait1', traitValue: 'value3' }, // unique trait
+        { traitType: 'trait2', traitValue: 'value3' }, // unique trait
         { traitType: 'trait3', traitValue: 'value3' },
       ],
     ]);
@@ -167,28 +165,28 @@ describe('RarityRanker', () => {
       token: new Token(new EVMContractTokenIdentifier('null', 1), TokenStandard.ERC721, null as any),
       rank: 0,
       score: 1.5,
-      tokenFeatures: { uniqueAttributeCount: 1 },
+      tokenFeatures: { uniqueTraitCount: 1 },
     });
 
     tokenRarities.push({
       token: new Token(new EVMContractTokenIdentifier('null', 2), TokenStandard.ERC721, null as any),
       rank: 0,
       score: 1.5,
-      tokenFeatures: { uniqueAttributeCount: 2 },
+      tokenFeatures: { uniqueTraitCount: 2 },
     });
 
     tokenRarities.push({
       token: new Token(new EVMContractTokenIdentifier('null', 3), TokenStandard.ERC721, null as any),
       rank: 0,
       score: 0.2,
-      tokenFeatures: { uniqueAttributeCount: 3 },
+      tokenFeatures: { uniqueTraitCount: 3 },
     });
 
     tokenRarities.push({
       token: new Token(new EVMContractTokenIdentifier('null', 4), TokenStandard.ERC721, null as any),
       rank: 0,
       score: 7.0,
-      tokenFeatures: { uniqueAttributeCount: 0 },
+      tokenFeatures: { uniqueTraitCount: 0 },
     });
 
     const result = RarityRanker.setRarityRanks(tokenRarities);

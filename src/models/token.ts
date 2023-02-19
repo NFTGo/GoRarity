@@ -1,5 +1,5 @@
 import { EVMContractTokenIdentifier } from './token-identifier';
-import { TokenMetadata } from './token-metadata';
+import { TokenMetadata, TraitType, TraitValue } from './token-metadata';
 import { TokenStandard } from './token-standard';
 
 export class Token {
@@ -23,5 +23,25 @@ export class Token {
 
   get metadata() {
     return this._metadata;
+  }
+
+  static fromErc721(
+    contractAddress: string,
+    tokenId: number,
+    traits: { traitType: TraitType; traitValue: TraitValue }[]
+  ) {
+    return new Token(
+      new EVMContractTokenIdentifier(contractAddress, tokenId),
+      TokenStandard.ERC721,
+      TokenMetadata.fromTokenTraits(traits)
+    );
+  }
+
+  hasTrait(traitName: TraitType) {
+    return this.metadata.traitExists(traitName);
+  }
+
+  traitCount() {
+    return this._metadata.stringTraits.size;
   }
 }

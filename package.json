@@ -8,6 +8,7 @@
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint ./ --max-warnings=0 --ext .ts",
+    "lint-fix": "eslint ./ --max-warnings=0 --ext .ts --fix",
     "format": "prettier --config .prettierrc '.' --write",
     "format-watch": "onchange -- prettier '.' --write {{changed}}",
     "test": "jest"
@@ -25,6 +26,7 @@
   "homepage": "https://github.com/NFTGo/GoRarity#readme",
   "devDependencies": {
     "@types/jest": "^29.4.0",
+    "@types/node": "^18.14.0",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "eslint": "^8.34.0",

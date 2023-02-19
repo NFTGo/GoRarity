@@ -2,17 +2,17 @@ import { Collection, Token } from '../models';
 import { TokenRankingFeatures } from '../models/token-ranking-features';
 
 export class TokenFeatureExtractor {
-  static extractUniqueAttributeCount(collection: Collection, token: Token): TokenRankingFeatures {
-    let uniqueAttributesCount = 0;
+  static extractUniqueTraitCount(collection: Collection, token: Token): TokenRankingFeatures {
+    let uniqueTraitCount = 0;
 
-    const traits = Array.from(token.metadata.stringAttributes.values());
+    const traits = Array.from(token.metadata.stringTraits.values());
     for (const trait of traits) {
-      const count = collection.totalTokensWithAttribute(trait);
+      const count = collection.totalTokensWithTrait(trait);
       if (count === 1) {
-        uniqueAttributesCount += 1;
+        uniqueTraitCount += 1;
       }
     }
 
-    return { uniqueAttributeCount: uniqueAttributesCount };
+    return { uniqueTraitCount: uniqueTraitCount };
   }
 }

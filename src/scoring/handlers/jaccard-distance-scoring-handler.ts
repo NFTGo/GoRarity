@@ -13,7 +13,7 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
 
     for (const token of tokens) {
       const indexes: number[] = [];
-      Array.from(token.metadata.stringAttributes.values()).forEach((trait) => {
+      Array.from(token.metadata.stringTraits.values()).forEach((trait) => {
         const traitKey = `${trait.name}-${trait.value}`;
         let index = traitKeyMapTraitKeysIndex.get(traitKey);
         if (index === undefined) {

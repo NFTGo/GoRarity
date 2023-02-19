@@ -20,7 +20,7 @@ export class RarityRanker {
     const tokenRarities: TokenRarity[] = [];
 
     for (let idx = 0; idx < tokens.length; idx++) {
-      const tokenFeatures = TokenFeatureExtractor.extractUniqueAttributeCount(collection, tokens[idx]);
+      const tokenFeatures = TokenFeatureExtractor.extractUniqueTraitCount(collection, tokens[idx]);
       tokenRarities.push({
         token: tokens[idx],
         score: scores[idx],

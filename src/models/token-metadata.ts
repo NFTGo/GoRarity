@@ -1,19 +1,27 @@
 import { normalizeAttributeString } from './utils/attribute-utils';
 
-export type AttributeName = string;
-export type AttributeValue = string;
+export type TraitType = string;
+export type TraitValue = string;
 
-export class StringAttribute {
-  private _name: AttributeName;
-  private _value: AttributeValue;
+export class StringTrait {
+  private _name: TraitType;
+  private _value: TraitValue;
 
-  constructor(name: AttributeName, value: AttributeValue) {
+  constructor(name: TraitType, value: TraitValue) {
     this._name = normalizeAttributeString(name);
-    this._value = normalizeAttributeString(value);
+    if (typeof value === 'string') {
+      this._value = normalizeAttributeString(value);
+    } else {
+      throw new TypeError(`provide trait value has invalid type: ${typeof value}, must be string.`);
+    }
   }
 
   get name() {
     return this._name;
+  }
+
+  set name(name: TraitType) {
+    this._name = name;
   }
 
   get value() {
@@ -22,35 +30,59 @@ export class StringAttribute {
 }
 
 export class TokenMetadata {
-  private _stringAttributes: Map<AttributeName, StringAttribute> = new Map();
+  private _stringTraits: Map<TraitType, StringTrait> = new Map();
 
-  constructor(stringAttributes: Map<AttributeName, StringAttribute>) {
-    if (!stringAttributes) {
-      throw new Error('null stringAttributes');
-    }
-    this._stringAttributes = TokenMetadata.normalizeAttributes<StringAttribute>(stringAttributes);
+  constructor(stringTraits?: Map<TraitType, StringTrait>) {
+    if (!stringTraits) return;
+    this._stringTraits = TokenMetadata.normalizeTraits<StringTrait>(stringTraits);
   }
 
-  get stringAttributes() {
-    return this._stringAttributes;
+  get stringTraits() {
+    return this._stringTraits;
   }
 
-  private static normalizeAttributes<T>(attributes: Map<AttributeName, T>) {
-    const normalizedAttributes = new Map<AttributeName, T>();
-    attributes.forEach((attribute, attributeName) => {
-      const normalizedAttributeName = normalizeAttributeString(attributeName);
-      normalizedAttributes.set(normalizedAttributeName, attribute);
+  private static normalizeTraits<T extends StringTrait>(traits: Map<TraitType, T>) {
+    const normalizedTraits = new Map<TraitType, T>();
+
+    traits.forEach((trait, traitName) => {
+      const normalizedTraitName = normalizeAttributeString(traitName);
+      if (trait.name !== normalizedTraitName) {
+        trait.name = normalizedTraitName;
+      }
+      normalizedTraits.set(normalizedTraitName, trait);
     });
-    return normalizedAttributes;
+
+    return normalizedTraits;
   }
 
-  static fromTokenTraits(tokenTraits: { traitType: string; traitValue: string }[]): TokenMetadata {
-    const stringAttributes: Map<AttributeName, StringAttribute> = new Map();
+  static fromTokenTraits(tokenTraits: { traitType: TraitType; traitValue: TraitValue }[]): TokenMetadata {
+    const stringTraits: Map<TraitType, StringTrait> = new Map();
 
     for (const trait of tokenTraits) {
-      stringAttributes.set(trait.traitType, new StringAttribute(trait.traitType, trait.traitValue));
+      if (typeof trait.traitValue === 'string') {
+        stringTraits.set(trait.traitType, new StringTrait(trait.traitType, trait.traitValue));
+      } else {
+        throw new TypeError(`provide trait value has invalid type: ${typeof trait.traitValue}, must be string.`);
+      }
     }
 
-    return new TokenMetadata(stringAttributes);
+    return new TokenMetadata(stringTraits);
+  }
+
+  toTraits(): Map<TraitType, TraitValue> {
+    const result = new Map<TraitType, TraitValue>();
+    Array.from(this._stringTraits.values()).forEach((trait) => {
+      result.set(trait.name, trait.value);
+    });
+    return result;
+  }
+
+  traitExists(traitName: TraitType): boolean {
+    const normalizedName = normalizeAttributeString(traitName);
+    return Boolean(this._stringTraits.get(normalizedName));
+  }
+
+  addTrait(trait: StringTrait) {
+    this._stringTraits.set(trait.name, trait);
   }
 }

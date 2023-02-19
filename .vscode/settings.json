@@ -8,6 +8,7 @@
   },
   "editor.formatOnSaveMode": "file",
   "editor.formatOnType": true,
+  "editor.formatOnPaste": false,
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -16,6 +17,7 @@
       "source.fixAll.eslint": true
     },
     "editor.formatOnSaveMode": "file",
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
+    "editor.formatOnPaste": false
   }
 }

@@ -1,35 +1,39 @@
 import { Token } from './token';
-import { AttributeName, AttributeValue, StringAttribute } from './token-metadata';
+import { StringTrait, TraitType, TraitValue } from './token-metadata';
 import { TokenStandard } from './token-standard';
 import { normalizeAttributeString } from './utils/attribute-utils';
 
-// export type CollectionAttribute = {
-//   attribute: StringAttribute,
-//   totalTokens: number,
-// }
+export type CollectionTrait = {
+  trait: StringTrait;
+  totalTokens: number;
+};
 
 export class Collection {
   private _name: string;
   private _tokens: Token[];
-  private _attributesFrequencyCounts: Map<AttributeName, Map<AttributeValue, number>>;
+  private _traitsFrequencyCounts: Map<TraitType, Map<TraitValue, number>>;
 
-  constructor(dict: { name: string; tokens: Token[] }) {
-    this._name = dict.name;
-    this._tokens = dict.tokens;
-    this._attributesFrequencyCounts = this.deriveNormalizedAttributesFrequencyCounts();
+  constructor(tokens: Token[], name = '') {
+    this._name = name;
+    this._tokens = tokens;
+    this._traitsFrequencyCounts = this.deriveNormalizedTraitsFrequencyCounts();
   }
 
-  // get name() {
-  //   return this._name;
-  // }
+  get name() {
+    return this._name;
+  }
 
   get tokens() {
     return this._tokens;
   }
 
-  // get tokenTotalSupply() {
-  //   return this._tokens.length;
-  // }
+  get tokenTotalSupply() {
+    return this._tokens.length;
+  }
+
+  get traitsFrequencyCounts() {
+    return this._traitsFrequencyCounts;
+  }
 
   tokenStandards(): TokenStandard[] {
     const tokenStandards = new Set<TokenStandard>();
@@ -39,27 +43,61 @@ export class Collection {
     return Array.from(tokenStandards.values());
   }
 
-  totalTokensWithAttribute(attribute: StringAttribute): number {
-    return this._attributesFrequencyCounts.get(attribute.name)?.get(attribute.value) || 0;
+  totalTokensWithTrait(trait: StringTrait): number {
+    return this._traitsFrequencyCounts.get(trait.name)?.get(trait.value) || 0;
   }
 
-  private deriveNormalizedAttributesFrequencyCounts(): Map<AttributeName, Map<AttributeValue, number>> {
-    const attributesFrequencyCounts: Map<AttributeName, Map<AttributeValue, number>> = new Map();
+  extractNullTraits(): Map<TraitType, CollectionTrait> {
+    const result = new Map<TraitType, CollectionTrait>();
+    Array.from(this._traitsFrequencyCounts.entries()).forEach(([traitName, traitValues]) => {
+      let totalTraitCount = 0;
+      Array.from(traitValues.values()).forEach((traitCount) => (totalTraitCount += traitCount));
+      const assetsWithoutTrait = this.tokenTotalSupply - totalTraitCount;
+      if (assetsWithoutTrait > 0) {
+        result.set(traitName, { trait: new StringTrait(traitName, 'Null'), totalTokens: assetsWithoutTrait });
+      }
+    });
+    return result;
+  }
+
+  extractCollectionTraits(): Map<TraitType, CollectionTrait[]> {
+    const result = new Map<TraitType, CollectionTrait[]>();
+
+    Array.from(this._traitsFrequencyCounts.entries()).forEach(([traitName, traitValues]) => {
+      Array.from(traitValues.entries()).forEach(([traitValue, traitCount]) => {
+        const arr = result.get(traitName);
+        if (arr) {
+          arr.push({ trait: new StringTrait(traitName, traitValue), totalTokens: traitCount });
+          result.set(traitName, arr);
+        } else {
+          result.set(
+            traitName,
+            new Array<CollectionTrait>({ trait: new StringTrait(traitName, traitValue), totalTokens: traitCount })
+          );
+        }
+      });
+    });
+
+    return result;
+  }
+
+  private deriveNormalizedTraitsFrequencyCounts(): Map<TraitType, Map<TraitValue, number>> {
+    const traitsFrequencyCounts: Map<TraitType, Map<TraitValue, number>> = new Map();
 
     for (const token of this._tokens) {
-      Array.from(token.metadata.stringAttributes.entries()).forEach(([attrName, strAttr]) => {
-        const normalizedName = normalizeAttributeString(attrName);
-        const map = attributesFrequencyCounts.get(normalizedName);
+      Array.from(token.metadata.stringTraits.entries()).forEach(([traitName, strTrait]) => {
+        const normalizedName = normalizeAttributeString(traitName);
+        const map = traitsFrequencyCounts.get(normalizedName);
         if (map) {
-          const currentCount = map.get(strAttr.value) || 0;
-          map.set(strAttr.value, currentCount + 1);
-          attributesFrequencyCounts.set(normalizedName, map);
+          const currentCount = map.get(strTrait.value) || 0;
+          map.set(strTrait.value, currentCount + 1);
+          traitsFrequencyCounts.set(normalizedName, map);
         } else {
-          attributesFrequencyCounts.set(normalizedName, new Map<AttributeValue, number>().set(strAttr.value, 1));
+          traitsFrequencyCounts.set(normalizedName, new Map<TraitValue, number>().set(strTrait.value, 1));
         }
       });
     }
 
-    return attributesFrequencyCounts;
+    return traitsFrequencyCounts;
   }
 }
