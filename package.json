@@ -2,16 +2,24 @@
   "name": "@nftgo/gorarity",
   "version": "1.0.0",
   "description": "An algorithm to calculate rarity of NFT(how special it is), based on Jaccard Distance.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/mjs/index.js",
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint ./ --max-warnings=0 --ext .ts",
     "lint-fix": "eslint ./ --max-warnings=0 --ext .ts --fix",
     "format": "prettier --config .prettierrc '.' --write",
     "format-watch": "onchange -- prettier '.' --write {{changed}}",
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -rf ./dist tsconfig.tsbuildinfo",
+    "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
+    "build": "yarn clean; yarn compile"
   },
   "repository": {
     "type": "git",
