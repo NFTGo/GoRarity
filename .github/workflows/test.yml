@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '.husky'
+      - '.vscode'
+      - '**.md'
+      - 'scripts/**'
+  pull_request:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '.husky'
+      - '.vscode'
+      - '**.md'
+      - 'scripts/**'
+
+jobs:
+  unit-test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+      - run: yarn install
+      - run: yarn test
