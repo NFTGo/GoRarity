@@ -1,0 +1,30 @@
+name: Pre-Release
+
+on:
+  push:
+    tags:
+      - 'v*beta*'
+
+jobs:
+  pre-release:
+    name: 'Pre Release'
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+          registry-url: 'https://registry.npmjs.org'
+      - run: yarn install
+      - run: yarn build
+      - uses: 'marvinpinto/action-automatic-releases@latest'
+        with:
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          prerelease: true
+          files: LICENSE
+      - run: yarn publish --access public --tag beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
