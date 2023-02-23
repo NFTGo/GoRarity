@@ -2,6 +2,17 @@
   "name": "@nftgo/gorarity",
   "version": "1.0.0",
   "description": "An algorithm to calculate rarity of NFT(how special it is), based on Jaccard Distance.",
+  "keywords": [
+    "rarity",
+    "nft",
+    "web3",
+    "nonfungibletoken",
+    "crypto",
+    "algorithm",
+    "nftgo",
+    "nodejs",
+    "javascript"
+  ],
   "exports": {
     ".": {
       "import": "./dist/mjs/index.js",
@@ -10,6 +21,9 @@
   },
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint ./ --max-warnings=0 --ext .ts",
@@ -25,7 +39,6 @@
     "type": "git",
     "url": "git+https://github.com/NFTGo/GoRarity.git"
   },
-  "keywords": [],
   "author": "NFTGo.io",
   "license": "MIT",
   "bugs": {
