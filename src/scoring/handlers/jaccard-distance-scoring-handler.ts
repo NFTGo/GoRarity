@@ -5,7 +5,17 @@ import { round } from '../utils';
 const MAX_RARITY_SCORE = 100;
 
 export class JaccardDistanceScoringHandler implements IScoringHandler {
+  /**
+   * @description Calculate the score of each token.
+   * @param collection
+   * @param tokens
+   * @returns The scores of each token, which has the same order with tokens.
+   */
   scoreTokens(collection: Collection, tokens: Token[]): number[] {
+    /**
+     * We use traitKeys Array index to represent a unique trait,
+     * so we can use the index set to identify which traits a token has.
+     */
     const traitKeys: string[] = [];
     const traitKeyMapTraitKeysIndex = new Map<string, number>();
     const tokenIds: number[] = [];
@@ -30,6 +40,13 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
     return this.calcScores(tokenIds, indexesList);
   }
 
+  /**
+   * @description Calculate the score of each token.
+   * The token score is defined as the sum of Jaccard Distance between this token and all other token.
+   * @param tokenIds Indicate all tokens using tokenId.
+   * @param indexesList Indicate the token traits using indexes, and the indexes list has the same order with tokenIds.
+   * @returns The scores of each token, which has the same order with tokenIds.
+   */
   private calcScores(tokenIds: number[], indexesList: number[][]): number[] {
     let maxScore = -1;
     let minScore = -1;
@@ -49,6 +66,13 @@ export class JaccardDistanceScoringHandler implements IScoringHandler {
     return this.normalizeScores(scores, maxScore, minScore);
   }
 
+  /**
+   * @description We use the Jaccard Distance as the algorithm for calculating the difference between two sets,
+   * you can get more information from here: https://en.wikipedia.org/wiki/Jaccard_index.
+   * @param traitsA The traits set of token A.
+   * @param traitsB The traits set of token B.
+   * @returns Distance. The distance indicate the difference between two sets. The bigger the distance, the more different between two sets.
+   */
   private calcDistance(traitsA: string[] | number[], traitsB: string[] | number[]): number {
     if (traitsA.length === 0 && traitsB.length === 0) return 0;
     let intersection = 0;

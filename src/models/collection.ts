@@ -43,6 +43,10 @@ export class Collection {
     return Array.from(tokenStandards.values());
   }
 
+  /**
+   * @description Return the number of tokens owning the trait.
+   * @param trait
+   */
   totalTokensWithTrait(trait: StringTrait): number {
     return this._traitsFrequencyCounts.get(trait.name)?.get(trait.value) || 0;
   }
@@ -81,6 +85,9 @@ export class Collection {
     return result;
   }
 
+  /**
+   * @description Count the number of occurrence of each trait. Use traitName and traitValue to uniquely identify a trait.
+   */
   private deriveNormalizedTraitsFrequencyCounts(): Map<TraitType, Map<TraitValue, number>> {
     const traitsFrequencyCounts: Map<TraitType, Map<TraitValue, number>> = new Map();
 

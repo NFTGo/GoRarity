@@ -8,11 +8,17 @@ export class RarityRanker {
 
   constructor() {}
 
-  static rankCollection(collection: Collection, score: Scorer = RarityRanker.defaultScorer): TokenRarity[] {
+  /**
+   * @description Ranks tokens in the collection with the default scorer implementation.
+   * @param collection
+   * @param scorer
+   * @returns Array of TokenRarity objects with score, rank and token information sorted by rank.
+   */
+  static rankCollection(collection: Collection, scorer: Scorer = RarityRanker.defaultScorer): TokenRarity[] {
     if (!collection || !collection.tokens || collection.tokens.length === 0) return [];
 
     const tokens = collection.tokens;
-    const scores = score.scoreTokens(collection, tokens);
+    const scores = scorer.scoreTokens(collection, tokens);
     if (scores.length !== tokens.length) {
       throw new Error(`dimension of scores doesn't match dimension of tokens`);
     }
@@ -32,6 +38,11 @@ export class RarityRanker {
     return RarityRanker.setRarityRanks(tokenRarities);
   }
 
+  /**
+   * @description Set the ranking of token according to it's rarity socre.
+   * @param tokenRarities Unordered array of tokens with rarity score information
+   * @returns Ordered array of tokens sorted by score descending
+   */
   static setRarityRanks(tokenRarities: TokenRarity[]): TokenRarity[] {
     tokenRarities.sort((a, b) => b.score - a.score);
 
