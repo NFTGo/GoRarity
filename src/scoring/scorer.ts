@@ -16,6 +16,12 @@ export class Scorer {
     }
   }
 
+  /**
+   * @description Calculate the score of each token.
+   * @param collection
+   * @param tokens
+   * @returns The scores of each token, which has the same order with tokens.
+   */
   scoreTokens(collection: Collection, tokens: Token[]): number[] {
     this.validateCollection(collection);
     return this.handler.scoreTokens(collection, tokens);
