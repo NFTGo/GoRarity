@@ -120,11 +120,11 @@ In addition, we will provide an http service example, which obtains the metadata
 
 @NFTGo/GoRarity, the trusted calculation library for NFT rarity, you can provide NFT traits and assemble them into Token Object and Collection Object, then call for RarityRanker's rankCollection method. You will get the return value, which is an array of TokenRarity objects with score, rank and token information sorted by rank. You can follow the example above to try it out.
 
-We use Jaccard distance as the underlying algorithm for the calculation of NFT rarity, you can get more information [here](https://en.wikipedia.org/wiki/Jaccard_index).
+We use Jaccard distance as the underlying algorithm for the calculation of NFT rarity, you can get more details [here](https://en.wikipedia.org/wiki/Jaccard_index).
 
 The consistency with OpenRarity in key classes, main methods, input parameters and return value is kept so you may easily use @NFTGo/GoRarity when you have used OpenRarity.
 
-You can get more information about the @NFTGo/GoRarity algorithm model from [NFTGo document](https://docs.nftgo.io/docs/introducing-gorarity). If you have any question or suggestion about the algorithm model described in the document, feel free to let us know via [Discord](https://discord.com/invite/nftgo).
+You can get more details about the @NFTGo/GoRarity algorithm from [NFTGo document](https://docs.nftgo.io/docs/introducing-gorarity). If you have any questions or suggestions about the algorithm model, feel free to let us know via [Discord](https://discord.com/invite/nftgo).
 
 # Setup and test locally
 
