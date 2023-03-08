@@ -114,7 +114,7 @@ Token 1 has rank 4 score 0
 Token 2 has rank 4 score 0
 ```
 
-In addition, we will provide an http service example, which obtains the metadata of NFTs through [NFTGo data-api](https://developer.nftgo.io/) to calculate the rarity of NFTs. This example can be directly used in a prod environment. You only need to prepare an [apiKey](https://developer.nftgo.io/) and a database according to the readme document, and then deploy it.
+In addition, we will provide an http service example, which obtains the metadata of NFTs through [NFTGo data-api](https://developer.nftgo.io/) to calculate the rarity of NFTs. This example can be directly used in a prod environment. You only need to get an [apiKey](https://developer.nftgo.io/) and a database according to the readme document, and then deploy it.
 
 # Introduction
 
@@ -124,7 +124,7 @@ We use Jaccard distance as the underlying algorithm for the calculation of NFT r
 
 The consistency with OpenRarity in key classes, main methods, input parameters and return value is kept so you may easily use @NFTGo/GoRarity when you have used OpenRarity.
 
-You can get more details about the @NFTGo/GoRarity algorithm from [NFTGo document](https://docs.nftgo.io/docs/introducing-gorarity). If you have any questions or suggestions about the algorithm model, feel free to let us know via [Discord](https://discord.com/invite/nftgo).
+You can get more details about the @NFTGo/GoRarity algorithm from [NFTGo document](https://docs.nftgo.io/docs/introducing-gorarity). If you have any questions or suggestions, feel free to let us know via [Discord](https://discord.com/invite/nftgo).
 
 # Setup and test locally
 
