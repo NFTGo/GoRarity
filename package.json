@@ -1,6 +1,6 @@
 {
   "name": "@nftgo/gorarity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An algorithm to calculate rarity of NFT(how special it is), based on Jaccard Distance.",
   "keywords": [
     "rarity",
